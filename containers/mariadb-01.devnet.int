@@ -1,0 +1,32 @@
+vzctl create 101 --ostemplate centos-7-x86 -–config basic   
+
+vzctl create 101 --ostemplate centos-7-x86_64-minimal -–config basic 
+
+
+vzctl set 101 --onboot yes --save
+vzctl set 101 --hostname server101.mydomain.com --save
+vzctl set 101 --ipadd 192.168.77.50/24 --save
+vzctl set 101 --nameserver 192.168.77.5 --searchdomain  devnet.int --save
+vzctl set 101 --ram 512M:512M --save
+vzctl set 150 --privvmpages 512M:1024M --save 
+ vzctl set 145143 --cpus 4 --save
+vzctl set 101 --userpasswd root:p@ssw0rd
+vzctl set 101 --description "Container 101
+vzctl set 101 --diskspace 2G:2G
+
+
+vzctl set 777 --ram 512M --swap 1G --save
+
+
+
+vzctl --verbose --verbose stop 145143
+vzctl start 101
+vzctl restart 101
+vzmigrate ts7.mydomain.com 101
+vzctl destroy 101
+vzctl exec 103 /etc/init.d/sshd status
+
+
+ref:
+
+https://www.looklinux.com/how-to-change-container-id-in-openvz/
