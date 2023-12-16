@@ -2,9 +2,9 @@ vzctl create 101 --ostemplate centos-7-x86 -–config basic
 
 vzctl create 101 --ostemplate centos-7-x86_64-minimal -–config basic 
 
-
+vzctl create 101 --ostemplate centos-7
 vzctl set 101 --onboot yes --save
-vzctl set 101 --hostname server101.mydomain.com --save
+vzctl set 101 --hostname mariadb-01.devnet.int --save
 vzctl set 101 --ipadd 192.168.77.50/24 --save
 vzctl set 101 --nameserver 192.168.77.5 --searchdomain  devnet.int --save
 vzctl set 101 --ram 512M:512M --save
@@ -30,3 +30,28 @@ vzctl exec 103 /etc/init.d/sshd status
 ref:
 
 https://www.looklinux.com/how-to-change-container-id-in-openvz/
+
+
+
+ /etc/systemd/system/vz-start-101.service
+
+[Unit]
+Description=Start Virtuozzo Container 101
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/vzctl start 101
+Restart=always
+User=root
+
+[Install]
+WantedBy=default.target
+
+
+systemctl daemon-reload
+systemctl enable vz-start-101
+systemctl start vz-start-101
+systemctl status vz-start-101
+
+
+
